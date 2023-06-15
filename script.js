@@ -5,12 +5,21 @@ document.addEventListener("DOMContentLoaded", function () {
     score: 0,
     gameOver: false,
     isMerged: [],
+    touchStartX: 0,
+    touchStartY: 0,
 
     init: function () {
       this.createGrid();
       this.addRandomTile();
       this.addRandomTile();
       this.updateGrid();
+
+      var gridContainer = document.querySelector(".grid-container");
+      gridContainer.addEventListener("touchstart", this.handleTouchStart.bind(this));
+      gridContainer.addEventListener("touchmove", this.handleTouchMove.bind(this));
+      gridContainer.addEventListener("touchend", this.handleTouchEnd.bind(this));
+
+      document.addEventListener("keydown", this.handleKeyDown.bind(this));
     },
 
     createGrid: function () {
@@ -93,207 +102,232 @@ document.addEventListener("DOMContentLoaded", function () {
                 k--;
                 moved = true;
               }
-              if (
-                k >= 0 &&
-                self.tiles[i][k] === currentTile &&
-                !self.isMerged[i][k]
-) {
-self.tiles[i][k] *= 2;
-self.tiles[i][k + 1] = null;
-self.score += self.tiles[i][k];
-self.isMerged[i][k] = true;
-moved = true;
-}
-}
-}
-}
-};
-  var moveRight = function () {
-    for (var i = 0; i < self.size; i++) {
-      for (var j = self.size - 2; j >= 0; j--) {
-        var currentTile = self.tiles[i][j];
-        if (currentTile !== null) {
-          var k = j + 1;
-          while (k < self.size && self.tiles[i][k] === null) {
-            self.tiles[i][k] = currentTile;
-            self.tiles[i][k - 1] = null;
-            k++;
-            moved = true;
+            }
           }
-          if (
-            k < self.size &&
-            self.tiles[i][k] === currentTile &&
-            !self.isMerged[i][k]
-          ) {
-            self.tiles[i][k] *= 2;
-            self.tiles[i][k - 1] = null;
-            self.score += self.tiles[i][k];
-            self.isMerged[i][k] = true;
-            moved = true;
+        }
+      };
+
+      var mergeLeft = function () {
+        for (var i = 0; i < self.size; i++) {
+          for (var j = 1; j < self.size; j++) {
+            var currentTile = self.tiles[i][j];
+            var previousTile = self.tiles[i][j - 1];
+            if (currentTile !== null && currentTile === previousTile && !self.isMerged[i][j - 1]) {
+              self.tiles[i][j - 1] = currentTile * 2;
+              self.tiles[i][j] = null;
+              self.score += currentTile * 2;
+              self.isMerged[i][j - 1] = true;
+              moved = true;
+            }
+          }
+        }
+      };
+
+      var moveUp = function () {
+        for (var i = 1; i < self.size; i++) {
+          for (var j = 0; j < self.size; j++) {
+            var currentTile = self.tiles[i][j];
+            if (currentTile !== null) {
+              var k = i - 1;
+              while (k >= 0 && self.tiles[k][j] === null) {
+                self.tiles[k][j] = currentTile;
+                self.tiles[k + 1][j] = null;
+                k--;
+                moved = true;
+              }
+            }
+          }
+        }
+      };
+
+      var mergeUp = function () {
+        for (var i = 1; i < self.size; i++) {
+          for (var j = 0; j < self.size; j++) {
+            var currentTile = self.tiles[i][j];
+            var previousTile = self.tiles[i - 1][j];
+            if (currentTile !== null && currentTile === previousTile && !self.isMerged[i - 1][j]) {
+              self.tiles[i - 1][j] = currentTile * 2;
+              self.tiles[i][j] = null;
+              self.score += currentTile * 2;
+              self.isMerged[i - 1][j] = true;
+              moved = true;
+            }
+          }
+        }
+      };
+
+      var moveRight = function () {
+        for (var i = 0; i < self.size; i++) {
+          for (var j = self.size - 2; j >= 0; j--) {
+            var currentTile = self.tiles[i][j];
+            if (currentTile !== null) {
+              var k = j + 1;
+              while (k < self.size && self.tiles[i][k] === null) {
+                self.tiles[i][k] = currentTile;
+                self.tiles[i][k - 1] = null;
+                k++;
+                moved = true;
+              }
+            }
+          }
+        }
+      };
+
+      var mergeRight = function () {
+        for (var i = 0; i < self.size; i++) {
+          for (var j = self.size - 2; j >= 0; j--) {
+            var currentTile = self.tiles[i][j];
+            var previousTile = self.tiles[i][j + 1];
+            if (currentTile !== null && currentTile === previousTile && !self.isMerged[i][j + 1]) {
+              self.tiles[i][j + 1] = currentTile * 2;
+              self.tiles[i][j] = null;
+              self.score += currentTile * 2;
+              self.isMerged[i][j + 1] = true;
+              moved = true;
+            }
+          }
+        }
+      };
+
+      var moveDown = function () {
+        for (var i = self.size - 2; i >= 0; i--) {
+          for (var j = 0; j < self.size; j++) {
+            var currentTile = self.tiles[i][j];
+            if (currentTile !== null) {
+              var k = i + 1;
+              while (k < self.size && self.tiles[k][j] === null) {
+                self.tiles[k][j] = currentTile;
+                self.tiles[k - 1][j] = null;
+                k++;
+                moved = true;
+              }
+            }
+          }
+        }
+      };
+
+      var mergeDown = function () {
+        for (var i = self.size - 2; i >= 0; i--) {
+          for (var j = 0; j < self.size; j++) {
+            var currentTile = self.tiles[i][j];
+            var previousTile = self.tiles[i + 1][j];
+            if (currentTile !== null && currentTile === previousTile && !self.isMerged[i + 1][j]) {
+              self.tiles[i + 1][j] = currentTile * 2;
+              self.tiles[i][j] = null;
+              self.score += currentTile * 2;
+              self.isMerged[i + 1][j] = true;
+              moved = true;
+            }
+          }
+        }
+      };
+
+      switch (direction) {
+        case "left":
+          moveLeft();
+          mergeLeft();
+          break;
+        case "up":
+          moveUp();
+          mergeUp();
+          break;
+        case "right":
+          moveRight();
+          mergeRight();
+          break;
+        case "down":
+          moveDown();
+          mergeDown();
+          break;
+      }
+
+      if (moved) {
+        this.addRandomTile();
+        this.updateGrid();
+        this.isMerged = this.isMerged.map(function (row) {
+          return row.map(function () {
+            return false;
+          });
+        });
+        if (!this.canMove()) {
+          this.gameOver = true;
+          alert("Game Over! Your score: " + this.score);
+        }
+      }
+    },
+
+    canMove: function () {
+      for (var i = 0; i < this.size; i++) {
+        for (var j = 0; j < this.size; j++) {
+          var currentTile = this.tiles[i][j];
+          if (currentTile === null) {
+            return true;
+          }
+          if (i > 0 && this.tiles[i - 1][j] === currentTile) {
+            return true;
+          }
+          if (i < this.size - 1 && this.tiles[i + 1][j] === currentTile) {
+            return true;
+          }
+          if (j > 0 && this.tiles[i][j - 1] === currentTile) {
+            return true;
+          }
+          if (j < this.size - 1 && this.tiles[i][j + 1] === currentTile) {
+            return true;
           }
         }
       }
-    }
-  };
+      return false;
+    },
 
-  var moveUp = function () {
-    for (var i = 1; i < self.size; i++) {
-      for (var j = 0; j < self.size; j++) {
-        var currentTile = self.tiles[i][j];
-        if (currentTile !== null) {
-          var k = i - 1;
-          while (k >= 0 && self.tiles[k][j] === null) {
-            self.tiles[k][j] = currentTile;
-            self.tiles[k + 1][j] = null;
-            k--;
-            moved = true;
-          }
-          if (
-            k >= 0 &&
-            self.tiles[k][j] === currentTile &&
-            !self.isMerged[k][j]
-          ) {
-            self.tiles[k][j] *= 2;
-            self.tiles[k + 1][j] = null;
-            self.score += self.tiles[k][j];
-            self.isMerged[k][j] = true;
-            moved = true;
-          }
+    handleTouchStart: function (event) {
+      this.touchStartX = event.touches[0].clientX;
+      this.touchStartY = event.touches[0].clientY;
+    },
+
+    handleTouchMove: function (event) {
+      event.preventDefault();
+    },
+
+    handleTouchEnd: function (event) {
+      var touchEndX = event.changedTouches[0].clientX;
+      var touchEndY = event.changedTouches[0].clientY;
+
+      var dx = touchEndX - this.touchStartX;
+      var dy = touchEndY - this.touchStartY;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) {
+          this.moveTiles("right");
+        } else {
+          this.moveTiles("left");
+        }
+      } else {
+        if (dy > 0) {
+          this.moveTiles("down");
+        } else {
+          this.moveTiles("up");
         }
       }
-    }
+    },
+
+    handleKeyDown: function (event) {
+      switch (event.key) {
+        case "ArrowUp":
+          this.moveTiles("up");
+          break;
+        case "ArrowDown":
+          this.moveTiles("down");
+          break;
+        case "ArrowLeft":
+          this.moveTiles("left");
+          break;
+        case "ArrowRight":
+          this.moveTiles("right");
+          break;
+      }
+    },
   };
 
-  var moveDown = function () {
-    for (var i = self.size - 2; i >= 0; i--) {
-      for (var j = 0; j < self.size; j++) {
-        var currentTile = self.tiles[i][j];
-        if (currentTile !== null) {
-          var k = i + 1;
-          while (k < self.size && self.tiles[k][j] === null) {
-            self.tiles[k][j] = currentTile;
-            self.tiles[k - 1][j] = null;
-            k++;
-            moved = true;
-          }
-          if (
-            k < self.size &&
-            self.tiles[k][j] === currentTile &&
-            !self.isMerged[k][j]
-          ) {
-            self.tiles[k][j] *= 2;
-            self.tiles[k - 1][j] = null;
-            self.score += self.tiles[k][j];
-            self.isMerged[k][j] = true;
-            moved = true;
-          }
-        }
-      }
-    }
-  };
-
-  // Call the appropriate move function based on the direction
-  if (direction === "left") {
-    moveLeft();
-  } else if (direction === "right") {
-    moveRight
-();
-} else if (direction === "up") {
-moveUp();
-} else if (direction === "down") {
-moveDown();
-}
-  if (moved) {
-    this.addRandomTile();
-    this.updateGrid();
-    this.resetMergeStatus();
-
-    if (this.isGameOver()) {
-      this.gameOver = true;
-      alert("Game Over! Your score: " + this.score);
-    }
-  }
-},
-
-resetMergeStatus: function () {
-  for (var i = 0; i < this.size; i++) {
-    for (var j = 0; j < this.size; j++) {
-      this.isMerged[i][j] = false;
-    }
-  }
-},
-
-isGameOver: function () {
-  for (var i = 0; i < this.size; i++) {
-    for (var j = 0; j < this.size; j++) {
-      var currentTile = this.tiles[i][j];
-      if (currentTile === null) {
-        return false;
-      }
-      if (
-        (i < this.size - 1 && currentTile === this.tiles[i + 1][j]) ||
-        (j < this.size - 1 && currentTile === this.tiles[i][j + 1])
-      ) {
-        return false;
-      }
-    }
-  }
-  return true;
-},
-};
-
-Game.init();
-
-document.addEventListener("keydown", function (event) {
-var direction;
-switch (event.key) {
-case "ArrowUp":
-direction = "up";
-break;
-case "ArrowDown":
-direction = "down";
-break;
-case "ArrowLeft":
-direction = "left";
-break;
-case "ArrowRight":
-direction = "right";
-break;
-default:
-return;
-}
-Game.moveTiles(direction);
-});
-});
-document.addEventListener("touchstart", function (event) {
-  touchStartX = event.touches[0].clientX;
-  touchStartY = event.touches[0].clientY;
-});
-
-document.addEventListener("touchmove", function (event) {
-  event.preventDefault();
-});
-
-document.addEventListener("touchend", function (event) {
-  var touchEndX = event.changedTouches[0].clientX;
-  var touchEndY = event.changedTouches[0].clientY;
-  var deltaX = touchEndX - touchStartX;
-  var deltaY = touchEndY - touchStartY;
-  var direction;
-
-  if (Math.abs(deltaX) > Math.abs(deltaY)) {
-    if (deltaX > 0) {
-      direction = "right";
-    } else {
-      direction = "left";
-    }
-  } else {
-    if (deltaY > 0) {
-      direction = "down";
-    } else {
-      direction = "up";
-    }
-  }
-
-  Game.moveTiles(direction);
+  Game.init();
 });
