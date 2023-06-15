@@ -296,18 +296,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     },
-  };
+
     isGameOver: function () {
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
-          var currentTile = this.tiles[i][j];
-          if (currentTile === null) {
+          var tile = this.tiles[i][j];
+          if (tile === null) {
             return false;
           }
-          if (j !== this.size - 1 && this.tiles[i][j + 1] === currentTile) {
+          if (j < this.size - 1 && tile === this.tiles[i][j + 1]) {
             return false;
           }
-          if (i !== this.size - 1 && this.tiles[i + 1][j] === currentTile) {
+          if (i < this.size - 1 && tile === this.tiles[i + 1][j]) {
             return false;
           }
         }
