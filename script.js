@@ -284,5 +284,30 @@ var Game = {
     document.addEventListener("touchstart", handleSwipeStart, false);
     document.addEventListener("touchmove", handleSwipeMove, false);
     document.addEventListener("touchend", handleSwipeEnd, false);
-  });
-  });
+  },
+
+  isGameOver: function () {
+    for (var i = 0; i < this.size; i++) {
+      for (var j = 0; j < this.size; j++) {
+        if (
+          this.tiles[i][j] === null ||
+          (j < this.size - 1 && this.tiles[i][j] === this.tiles[i][j + 1]) ||
+          (i < this.size - 1 && this.tiles[i][j] === this.tiles[i + 1][j])
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
+
+  resetMergeStatus: function () {
+    for (var i = 0; i < this.size; i++) {
+      for (var j = 0; j < this.size; j++) {
+        this.isMerged[i][j] = false;
+      }
+    }
+  },
+};
+
+Game.init();
