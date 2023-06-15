@@ -1,0 +1,22 @@
+/* 样式表可以根据你的需要进行修改 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+  padding: 10px;
+  background-color: #bbada0;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100px;
+  background-color: #cdc1b4;
+  color: #776e65;
+  border-radius: 5px;
+  font-weight: bold;
+}
