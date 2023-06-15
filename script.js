@@ -89,6 +89,93 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       return true;
     },
+
+    moveTiles: function (direction) {
+      if (this.gameOver) {
+        return;
+      }
+
+      var self = this;
+      var moved = false;
+
+      // Create a copy of the current grid
+      var previousTiles = JSON.parse(JSON.stringify(this.tiles));
+
+      // Perform the move based on the direction
+      switch (direction) {
+        case "up":
+          moved = this.moveUp();
+          break;
+        case "down":
+          moved = this.moveDown();
+          break;
+        case "left":
+          moved = this.moveLeft();
+          break;
+        case "right":
+          moved = this.moveRight();
+          break;
+        default:
+          break;
+      }
+
+      if (moved) {
+        this.addRandomTile();
+        this.updateGrid();
+        if (this.isGameOver()) {
+          this.gameOver = true;
+          setTimeout(function () {
+            alert("Game over!");
+          }, 100);
+        }
+      } else {
+        // If no tiles moved, restore the previous grid
+        this.tiles = previousTiles;
+      }
+    },
+
+    moveUp: function () {
+      var moved = false;
+      for (var j = 0; j < this.size; j++) {
+        for (var i = 1; i < this.size; i++) {
+          if (this.tiles[i][j] !== null) {
+            var k = i;
+            while (k > 0 && this.tiles[k - 1][j] === null) {
+              this.tiles[k - 1][j] = this.tiles[k][j];
+              this.tiles[k][j] = null;
+              k--;
+              moved = true;
+            }
+            if (
+              k > 0 &&
+              this.tiles[k - 1][j] === this.tiles[k][j] &&
+              !this.tilesMerged[k - 1][j] &&
+              !this.tilesMerged[k][j]
+            ) {
+              this.tiles[k - 1][j] *= 2;
+              this.tiles[k][j] = null;
+              this.tilesMerged[k - 1][j] = true;
+              this.score += this.tiles[k - 1][j];
+              moved = true;
+            }
+          }
+        }
+      }
+      this.resetMergeFlags();
+      return moved;
+    },
+
+    // Implement the moveDown, moveLeft, and moveRight functions similarly
+
+    resetMergeFlags: function () {
+      this.tilesMerged = [];
+      for (var i = 0; i < this.size; i++) {
+        this.tilesMerged[i] = [];
+        for (var j = 0; j < this.size; j++) {
+          this.tilesMerged[i][j] = false;
+        }
+      }
+    },
   };
 
   Game.init();
