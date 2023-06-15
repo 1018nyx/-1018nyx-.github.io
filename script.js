@@ -275,27 +275,27 @@ document.addEventListener("DOMContentLoaded", function () {
     },
 
     handleTouchEnd: function (event) {
-      var touch = event.changedTouches[0];
-      var touchEndX = touch.clientX;
-      var touchEndY = touch.clientY;
+  var touch = event.changedTouches[0];
+  var touchEndX = touch.clientX;
+  var touchEndY = touch.clientY;
 
-      var dx = touchEndX - this.touchStartX;
-      var dy = touchEndY - this.touchStartY;
+  var dx = touchEndX - this.touchStartX;
+  var dy = touchEndY - this.touchStartY;
 
-      if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0) {
-          this.moveTiles("right");
-        } else {
-          this.moveTiles("left");
-        }
-      } else {
-        if (dy > 0) {
-          this.moveTiles("down");
-        } else {
-          this.moveTiles("up");
-        }
-      }
-    },
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 0) {
+      this.moveTiles("right");
+    } else {
+      this.moveTiles("left");
+    }
+  } else {
+    if (dy > 0) {
+      this.moveTiles("down");
+    } else {
+      this.moveTiles("up");
+    }
+  }
+},
 
     isGameOver: function () {
       for (var i = 0; i < this.size; i++) {
