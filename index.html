@@ -1,92 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2048 Game</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <div class="container">
-    <h1 class="title">2048 Game</h1>
-    <div class="grid-container"></div>
-    <div class="game-over">Game Over!</div>
-    <button class="restart-button">Restart</button>
-  </div>
-
-  <script>
-    // Your modified JavaScript code goes here
-    // ...
-
-    document.addEventListener("DOMContentLoaded", function () {
-      // Modified Game object and its methods
-      var Game = {
-        // ...
-
-        moveTiles: function (direction) {
-          // ...
-
-          var moveLeft = function () {
-            // ...
-          };
-
-          var mergeLeft = function () {
-            // ...
-          };
-
-          var moveRight = function () {
-            // ...
-          };
-
-          var mergeRight = function () {
-            // ...
-          };
-
-          var moveUp = function () {
-            // ...
-          };
-
-          var mergeUp = function () {
-            // ...
-          };
-
-          var moveDown = function () {
-            // ...
-          };
-
-          var mergeDown = function () {
-            // ...
-          };
-
-          if (direction === "left") {
-            moveLeft();
-            mergeLeft();
-            moveLeft();
-          } else if (direction === "right") {
-            moveRight();
-            mergeRight();
-            moveRight();
-          } else if (direction === "up") {
-            moveUp();
-            mergeUp();
-            moveUp();
-          } else if (direction === "down") {
-            moveDown();
-            mergeDown();
-            moveDown();
-          }
-
-          // ...
-        },
-
-        // ...
-      };
-
-      Game.init();
-    });
-  </script>
+  <div class="grid-container"></div>
+  <script src="script.js"></script>
 </body>
-
 </html>
