@@ -1,18 +1,29 @@
+.container {
+  text-align: center;
+  margin-top: 50px;
+}
+
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
-  background-color: #BBADA0;
-  padding: 10px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .tile {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 80px;
+  background-color: #cdc1cd;
   font-size: 24px;
   font-weight: bold;
-  background-color: #CDC1B4;
-  color: #776E65;
-  height: 100px;
+  color: #000;
+}
+
+.score {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
 }
