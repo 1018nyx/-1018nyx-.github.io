@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 400px; /* 调整容器宽度适应屏幕 */
+  max-width: 800px; /* 调整容器宽度适应屏幕 */
   margin: 0 auto;
 }
 
@@ -10,9 +10,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
-  height: 80px;
-  font-size: 28px;
+  width: 120px;
+  height: 120px;
+  font-size: 48px;
   font-weight: bold;
   background-color: #eee4da;
   color: #776e65;
@@ -36,8 +36,8 @@
   }
 
   .tile {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
   }
 }
