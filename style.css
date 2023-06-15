@@ -1,18 +1,22 @@
 .grid-container {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 1600px; /* 调整容器宽度适应屏幕 */
+  height: 100vh;
+  max-width: 800px;
   margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .tile {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 240px;
-  height: 240px;
-  font-size: 96px;
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
   font-weight: bold;
   background-color: #eee4da;
   color: #776e65;
@@ -31,13 +35,14 @@
 
 @media (max-width: 480px) {
   .grid-container {
-    width: 400px;
-    height: 400px;
+    width: 100%;
+    height: auto;
+    padding: 5px;
   }
 
   .tile {
-    width: 160px;
-    height: 160px;
-    font-size: 48px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
 }
