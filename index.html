@@ -1,46 +1,22 @@
-.container {
-  text-align: center;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-.title {
-  font-size: 36px;
-  margin-bottom: 20px;
-}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048 Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-gap: 10px;
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  background-color: #bbada0;
-  border-radius: 5px;
-  padding: 10px;
-}
+<body>
+  <div class="container">
+    <h1 class="title">2048 Game</h1>
+    <div class="grid-container"></div>
+    <div class="game-over">Game Over!</div>
+    <button class="restart-button">Restart</button>
+  </div>
 
-.tile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #cdc1b4;
-  border-radius: 5px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #776e65;
-}
+  <script src="script.js"></script>
+</body>
 
-.game-over {
-  font-size: 24px;
-  font-weight: bold;
-  color: #776e65;
-  display: none;
-  margin-top: 20px;
-}
-
-.restart-button {
-  font-size: 18px;
-  padding: 10px 20px;
-  margin-top: 20px;
-}
+</html>
