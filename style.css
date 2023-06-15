@@ -20,6 +20,12 @@ body {
   background-color: #bbada0;
   border-radius: 10px;
 }
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr); /* 调整列数为4 */
+    width: 300px; /* 调整容器宽度 */
+  }
+}
 
 .tile {
   display: flex;
