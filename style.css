@@ -1,8 +1,8 @@
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-gap: 10px;
-  width: 350px; /* 调整容器宽度适应屏幕 */
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 350px; /* 调整容器宽度适应屏幕 */
   margin: 0 auto;
 }
 
