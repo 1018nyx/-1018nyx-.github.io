@@ -37,7 +37,7 @@
   }
 
   .tile {
-    flex-basis: 40%;
+    flex-basis: 60%;
     height: 60px;
     font-size: 18px;
   }
