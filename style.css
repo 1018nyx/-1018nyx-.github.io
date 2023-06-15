@@ -2,8 +2,10 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 800px; /* 调整容器宽度适应屏幕 */
+  max-width: 800px;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 }
 
 .tile {
