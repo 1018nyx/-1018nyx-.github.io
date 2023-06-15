@@ -1,3 +1,11 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+  width: 350px; /* 调整容器宽度适应屏幕 */
+  margin: 0 auto;
+}
+
 .tile {
   display: flex;
   justify-content: center;
@@ -8,6 +16,7 @@
   font-weight: bold;
   background-color: #eee4da;
   color: #776e65;
+  border-radius: 5px;
 }
 
 .restart-button {
