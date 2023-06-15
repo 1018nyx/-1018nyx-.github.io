@@ -13,17 +13,19 @@ body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
-  width: 400px;
-  max-width: 90%;
+  width: 100%;
+  max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   background-color: #bbada0;
   border-radius: 10px;
 }
+
 @media (max-width: 600px) {
   .grid-container {
     grid-template-columns: repeat(4, 1fr); /* 调整列数为4 */
-    width: 300px; /* 调整容器宽度 */
+    width: 100%; /* 调整容器宽度 */
+    max-width: 300px; /* 设置最大宽度为300px */
   }
 }
 
@@ -37,10 +39,4 @@ body {
   height: 100%;
   background-color: #cdc1b4;
   border-radius: 5px;
-}
-
-@media (max-width: 600px) {
-  .grid-container {
-    width: 300px;
-  }
 }
