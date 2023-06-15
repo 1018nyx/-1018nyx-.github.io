@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 350px; /* 调整容器宽度适应屏幕 */
+  max-width: 400px; /* 调整容器宽度适应屏幕 */
   margin: 0 auto;
 }
 
@@ -10,9 +10,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px;
-  height: 60px;
-  font-size: 24px;
+  width: 80px;
+  height: 80px;
+  font-size: 28px;
   font-weight: bold;
   background-color: #eee4da;
   color: #776e65;
