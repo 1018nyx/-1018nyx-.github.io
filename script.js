@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 }
 
+
     addRandomTile: function () {
       var emptyTiles = [];
       for (var i = 0; i < this.size; i++) {
