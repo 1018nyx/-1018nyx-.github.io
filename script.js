@@ -1,19 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   var Game = {
-    size: 4,
+    size: 5,
     tiles: [],
     score: 0,
     gameOver: false,
     isMerged: [],
 
-    init: function () {
+    init: function() {
       this.createGrid();
       this.addRandomTile();
       this.addRandomTile();
       this.updateGrid();
     },
 
-    createGrid: function () {
+    createGrid: function() {
       for (var i = 0; i < this.size; i++) {
         this.tiles[i] = [];
         this.isMerged[i] = [];
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
 
-    addRandomTile: function () {
+    addRandomTile: function() {
       var emptyTiles = [];
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
 
-    updateGrid: function () {
+    updateGrid: function() {
       var gridContainer = document.querySelector(".grid-container");
       gridContainer.innerHTML = "";
 
@@ -58,25 +58,25 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
 
-    getTileColor: function (value) {
+    getTileColor: function(value) {
       var colors = {
-        2: "#EEE4DA",
-        4: "#EDE0C8",
-        8: "#F2B179",
-        16: "#F59563",
-        32: "#F67C5F",
-        64: "#F65E3B",
-        128: "#EDCF72",
-        256: "#EDCC61",
-        512: "#EDC850",
-        1024: "#EDC53F",
-        2048: "#EDC22E"
+        2: "#eee4da",
+        4: "#ede0c",
+        8: "#f2b179",
+        16: "#f59563",
+        32: "#f67c5f",
+        64: "#f65e3b",
+        128: "#edcf72",
+        256: "#edcc61",
+        512: "#edc850",
+        1024: "#edc53f",
+        2048: "#edc22e",
       };
 
-      return colors[value] || "#CDC1B4";
+      return colors[value] || "#cdcdc1";
     },
 
-    moveTiles: function (direction) {
+    moveTiles: function(direction) {
       if (this.gameOver) return;
 
       this.resetMergeState();
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
       this.checkGameOver();
     },
 
-    resetMergeState: function () {
+    resetMergeState: function() {
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
           this.isMerged[i][j] = false;
@@ -109,56 +109,62 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
 
-    moveUp: function () {
+    moveUp: function() {
       // 移动逻辑
     },
 
-    moveDown: function () {
+    moveDown: function() {
       // 移动逻辑
     },
 
-    moveLeft: function () {
+    moveLeft: function() {
       // 移动逻辑
     },
 
-    moveRight: function () {
+    moveRight: function() {
       // 移动逻辑
     },
 
-    checkGameOver: function () {
+    checkGameOver: function() {
       // 检查游戏结束逻辑
-    }
+    },
   };
 
   Game.init();
 
-  var touchStartX = 0;
-  var touchStartY = 0;
+  var handleMove = function(event) {
+    var touch = event.touches[0];
+    var startX = touch.pageX;
+    var startY = touch.pageY;
 
-  document.addEventListener("touchstart", function (event) {
-    touchStartX = event.touches[0].clientX;
-    touchStartY = event.touches[0].clientY;
-  });
-
-  document.addEventListener("touchend", function (event) {
-    var touchEndX = event.changedTouches[0].clientX;
-    var touchEndY = event.changedTouches[0].clientY;
-
-    var deltaX = touchEndX - touchStartX;
-    var deltaY = touchEndY - touchStartY;
+    var deltaX = touch.pageX - startX;
+    var deltaY = touch.pageY - startY;
+    var direction = "";
 
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX > 0) {
-        Game.moveTiles("right");
+        direction = "right";
       } else {
-        Game.moveTiles("left");
+        direction = "left";
       }
     } else {
       if (deltaY > 0) {
-        Game.moveTiles("down");
+        direction = "down";
       } else {
-        Game.moveTiles("up");
+        direction = "up";
       }
     }
+
+    Game.moveTiles(direction);
+  };
+
+  document.addEventListener("touchstart", function(event) {
+    event.preventDefault();
+    handleMove(event);
+  });
+
+  document.addEventListener("touchend", function(event) {
+    event.preventDefault();
+    handleMove(event);
   });
 });
