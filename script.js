@@ -141,8 +141,8 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       var moveUp = function () {
-        for (var j = 0; j < self.size; j++) {
-          for (var i = 1; i < self.size; i++) {
+        for (var i = 1; i < self.size; i++) {
+          for (var j = 0; j < self.size; j++) {
             var currentTile = self.tiles[i][j];
             if (currentTile !== null) {
               var k = i - 1;
@@ -169,8 +169,8 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       var moveDown = function () {
-        for (var j = 0; j < self.size; j++) {
-          for (var i = self.size - 2; i >= 0; i--) {
+        for (var i = self.size - 2; i >= 0; i--) {
+          for (var j = 0; j < self.size; j++) {
             var currentTile = self.tiles[i][j];
             if (currentTile !== null) {
               var k = i + 1;
@@ -214,47 +214,104 @@ document.addEventListener("DOMContentLoaded", function () {
       if (moved) {
         this.addRandomTile();
         this.updateGrid();
-        this.checkGameOver();
+        this.isMerged = this.createEmptyArray();
+        if (!this.canMove()) {
+          this.gameOver = true;
+          alert("Game Over! Your score: " + this.score);
+        }
       }
     },
 
+    createEmptyArray: function () {
+      var arr = [];
+      for (var i = 0; i < this.size; i++) {
+        arr[i] = [];
+        for (var j = 0; j < this.size; j++) {
+          arr[i][j] = false;
+        }
+      }
+      return arr;
+    },
+
+    canMove: function () {
+      for (var i = 0; i < this.size; i++) {
+        for (var j = 0; j < this.size; j++) {
+          if (this.tiles[i][j] === null) {
+            return true;
+          }
+          if (j > 0 && this.tiles[i][j] === this.tiles[i][j - 1]) {
+            return true;
+          }
+          if (j < this.size - 1 && this.tiles[i][j] === this.tiles[i][j + 1]) {
+            return true;
+          }
+          if (i > 0 && this.tiles[i][j] === this.tiles[i - 1][j]) {
+            return true;
+          }
+          if (i < this.size - 1 && this.tiles[i][j] === this.tiles[i + 1][j]) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+
     addTouchListeners: function () {
-      var self = this;
       var gridContainer = document.querySelector(".grid-container");
+      var self = this;
 
       gridContainer.addEventListener("touchstart", function (event) {
         self.touchStartX = event.touches[0].clientX;
         self.touchStartY = event.touches[0].clientY;
       });
 
+      gridContainer.addEventListener("touchmove", function (event) {
+        event.preventDefault();
+      });
+
       gridContainer.addEventListener("touchend", function (event) {
         var touchEndX = event.changedTouches[0].clientX;
         var touchEndY = event.changedTouches[0].clientY;
+        var dx = touchEndX - self.touchStartX;
+        var dy = touchEndY - self.touchStartY;
 
-        var deltaX = touchEndX - self.touchStartX;
-        var deltaY = touchEndY - self.touchStartY;
-
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          if (deltaX > 0) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0) {
             self.moveTiles("right");
-          } else {
+          } else if (dx < 0) {
             self.moveTiles("left");
           }
         } else {
-          if (deltaY > 0) {
+          if (dy > 0) {
             self.moveTiles("down");
-          } else {
+          } else if (dy < 0) {
             self.moveTiles("up");
           }
         }
       });
     },
-
-    checkGameOver: function () {
-      // Check if game over condition is met
-      // ...
-    }
   };
 
   Game.init();
+
+  document.addEventListener("keydown", function (event) {
+    var direction = "";
+    switch (event.key) {
+      case "ArrowUp":
+        direction = "up";
+        break;
+      case "ArrowDown":
+        direction = "down";
+        break;
+      case "ArrowLeft":
+        direction = "left";
+        break;
+      case "ArrowRight":
+        direction = "right";
+        break;
+    }
+    if (direction !== "") {
+      Game.moveTiles(direction);
+    }
+  });
 });
