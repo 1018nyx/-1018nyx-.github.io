@@ -22,16 +22,20 @@ document.addEventListener("DOMContentLoaded", function () {
       document.addEventListener("keydown", this.handleKeyDown.bind(this));
     },
 
-    createGrid: function () {
+   createGrid: function () {
+  this.tiles = [];
+  this.isMerged = [];
+
   for (var i = 0; i < this.size; i++) {
     this.tiles[i] = [];
     this.isMerged[i] = [];
+
     for (var j = 0; j < this.size; j++) {
       this.tiles[i][j] = null;
       this.isMerged[i][j] = false;
     }
   }
-}
+},
 
 
     addRandomTile: function () {
