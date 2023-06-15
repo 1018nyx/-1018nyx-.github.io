@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
 
-    updateGrid: function () {
+   updateGrid: function () {
   var gridContainer = document.querySelector(".grid-container");
   gridContainer.innerHTML = "";
 
