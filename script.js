@@ -84,28 +84,36 @@ document.addEventListener("DOMContentLoaded", function () {
       return colors[value] || "#cdc1b4";
     },
 
-    moveTiles: function (direction) {
-      if (this.gameOver) return;
+   moveTiles: function (direction) {
+  if (this.gameOver) return;
 
-      var self = this;
-      var moved = false;
+  var self = this;
+  var moved = false;
 
-      var moveLeft = function () {
-        for (var i = 0; i < self.size; i++) {
-          for (var j = 1; j < self.size; j++) {
-            var currentTile = self.tiles[i][j];
-            if (currentTile !== null) {
-              var k = j - 1;
-              while (k >= 0 && self.tiles[i][k] === null) {
-                self.tiles[i][k] = currentTile;
-                self.tiles[i][k + 1] = null;
-                k--;
-                moved = true;
-              }
-            }
+  var moveLeft = function () {
+    for (var i = 0; i < self.size; i++) {
+      for (var j = 1; j < self.size; j++) {
+        var currentTile = self.tiles[i][j];
+        if (currentTile !== null) {
+          var k = j - 1;
+          while (k >= 0 && self.tiles[i][k] === null) {
+            self.tiles[i][k] = currentTile;
+            self.tiles[i][k + 1] = null;
+            self.isMerged[i][k] = self.isMerged[i][k + 1]; // Update isMerged array
+            self.isMerged[i][k + 1] = false; // Reset isMerged for the moved tile
+            k--;
+            moved = true;
           }
         }
-      };
+      }
+    }
+  };
+
+  // Remaining code...
+
+  // Rest of the moveTiles function remains unchanged
+}
+
 
       var mergeLeft = function () {
         for (var i = 0; i < self.size; i++) {
