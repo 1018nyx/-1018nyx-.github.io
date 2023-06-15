@@ -132,16 +132,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Game.init();
 
-  var startX, startY;
+  var startCoords = {};
 
-  document.addEventListener("touchstart", function (event) {
-    startX = event.touches[0].clientX;
-    startY = event.touches[0].clientY;
-  });
+  var handleTouchStart = function (event) {
+    event.preventDefault();
+    var touch = event.touches[0];
+    startCoords = { x: touch.pageX, y: touch.pageY };
+  };
 
-  document.addEventListener("touchend", function (event) {
-    var deltaX = event.changedTouches[0].clientX - startX;
-    var deltaY = event.changedTouches[0].clientY - startY;
+  var handleTouchMove = function (event) {
+    event.preventDefault();
+    var touch = event.touches[0];
+    var deltaX = touch.pageX - startCoords.x;
+    var deltaY = touch.pageY - startCoords.y;
     var direction = "";
 
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
@@ -159,5 +162,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     Game.moveTiles(direction);
-  });
+  };
+
+  var handleTouchEnd = function (event) {
+    event.preventDefault();
+  };
+
+  document.addEventListener("touchstart", handleTouchStart);
+  document.addEventListener("touchmove", handleTouchMove);
+  document.addEventListener("touchend", handleTouchEnd);
 });
