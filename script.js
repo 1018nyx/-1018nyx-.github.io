@@ -1,4 +1,3 @@
-User
 document.addEventListener("DOMContentLoaded", function () {
   var Game = {
     size: 5,
