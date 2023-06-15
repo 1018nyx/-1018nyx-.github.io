@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     isMerged: [],
     touchStartX: 0,
     touchStartY: 0,
+    touchEndX: 0,
+    touchEndY: 0,
 
     init: function () {
       this.createGrid();
@@ -196,117 +198,100 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       };
 
-      // Call the appropriate move function based on the direction
-      if (direction === "left") {
-        moveLeft();
-      } else if (direction === "right") {
-        moveRight();
-      } else if (direction === "up") {
-        moveUp();
-      } else if (direction === "down") {
-        moveDown();
-      }
-
-      if (moved) {
-        this.addRandomTile();
-        this.updateGrid();
-        this.resetMergeStatus();
-
-        if (this.isGameOver()) {
-          this.gameOver = true;
-          alert("Game Over! Your score: " + this.score);
+      var handleMove = function () {
+        if (direction === "left") {
+          moveLeft();
+        } else if (direction === "right") {
+          moveRight();
+        } else if (direction === "up") {
+          moveUp();
+        } else if (direction === "down") {
+          moveDown();
         }
-      }
+
+        if (moved) {
+          self.addRandomTile();
+          self.updateGrid();
+          self.checkGameOver();
+        }
+      };
+
+      handleMove();
     },
 
-    resetMergeStatus: function () {
+    addTouchListeners: function () {
+      var gridContainer = document.querySelector(".grid-container");
+
+      gridContainer.addEventListener("touchstart", function (event) {
+        var touch = event.touches[0];
+        this.touchStartX = touch.clientX;
+        this.touchStartY = touch.clientY;
+      });
+
+      gridContainer.addEventListener("touchmove", function (event) {
+        event.preventDefault();
+      });
+
+      gridContainer.addEventListener("touchend", function (event) {
+        var touch = event.changedTouches[0];
+        this.touchEndX = touch.clientX;
+        this.touchEndY = touch.clientY;
+
+        var deltaX = this.touchEndX - this.touchStartX;
+        var deltaY = this.touchEndY - this.touchStartY;
+        var swipeThreshold = 50;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (Math.abs(deltaX) > swipeThreshold) {
+            if (deltaX > 0) {
+              // Swipe right
+              this.moveTiles("right");
+            } else {
+              // Swipe left
+              this.moveTiles("left");
+            }
+          }
+        } else {
+          if (Math.abs(deltaY) > swipeThreshold) {
+            if (deltaY > 0) {
+              // Swipe down
+              this.moveTiles("down");
+            } else {
+              // Swipe up
+              this.moveTiles("up");
+            }
+          }
+        }
+      });
+    },
+
+    checkGameOver: function () {
+      // Check if there are any valid moves left
+      var validMoves = false;
+
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
-          this.isMerged[i][j] = false;
-        }
-      }
-    },
-
-    isGameOver: function () {
-      for (var i = 0; i < this.size; i++) {
-        for (var j = 0; j < this.size; j++) {
-          var currentTile = this.tiles[i][j];
-          if (currentTile === null) {
-            return false;
+          if (this.tiles[i][j] === null) {
+            validMoves = true;
+            break;
           }
-          if (
-            (i < this.size - 1 && currentTile === this.tiles[i + 1][j]) ||
-            (j < this.size - 1 && currentTile === this.tiles[i][j + 1])
-          ) {
-            return false;
+          if (j < this.size - 1 && this.tiles[i][j] === this.tiles[i][j + 1]) {
+            validMoves = true;
+            break;
+          }
+          if (i < this.size - 1 && this.tiles[i][j] === this.tiles[i + 1][j]) {
+            validMoves = true;
+            break;
           }
         }
       }
-      return true;
-    },
 
-    handleSwipe: function (startX, startY, endX, endY) {
-      var deltaX = endX - startX;
-      var deltaY = endY - startY;
-      var direction;
-
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        if (deltaX > 0) {
-          direction = "right";
-        } else {
-          direction = "left";
-        }
-      } else {
-        if (deltaY > 0) {
-          direction = "down";
-        } else {
-          direction = "up";
-        }
+      if (!validMoves) {
+        this.gameOver = true;
+        alert("Game Over! Your Score: " + this.score);
       }
-
-      this.moveTiles(direction);
     },
   };
 
   Game.init();
-
-  document.addEventListener("keydown", function (event) {
-    var direction;
-    switch (event.key) {
-      case "ArrowUp":
-        direction = "up";
-        break;
-      case "ArrowDown":
-        direction = "down";
-        break;
-      case "ArrowLeft":
-        direction = "left";
-        break;
-      case "ArrowRight":
-        direction = "right";
-        break;
-      default:
-        return;
-    }
-    Game.moveTiles(direction);
-  });
-
-  var touchStartX = 0;
-  var touchStartY = 0;
-
-  document.addEventListener("touchstart", function (event) {
-    touchStartX = event.touches[0].clientX;
-    touchStartY = event.touches[0].clientY;
-  });
-
-  document.addEventListener("touchend", function (event) {
-    var touchEndX = event.changedTouches[0].clientX;
-    var touchEndY = event.changedTouches[0].clientY;
-    Game.handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
-  });
-
-  var restartButton = document.querySelector(".restart-button");
-  restartButton.addEventListener("click", function () {
-    Game.init();
-  });
 });
