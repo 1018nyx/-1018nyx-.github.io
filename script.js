@@ -52,20 +52,21 @@ document.addEventListener("DOMContentLoaded", function () {
     },
 
     updateGrid: function () {
-      var gridContainer = document.querySelector(".grid-container");
-      gridContainer.innerHTML = "";
+  var gridContainer = document.querySelector(".grid-container");
+  gridContainer.innerHTML = "";
 
-      for (var i = 0; i < this.size; i++) {
-        for (var j = 0; j < this.size; j++) {
-          var tile = this.tiles[i][j];
-          var tileElement = document.createElement("div");
-          tileElement.className = "tile";
-          tileElement.textContent = tile !== null ? tile : "";
-          tileElement.style.backgroundColor = this.getTileColor(tile);
-          gridContainer.appendChild(tileElement);
-        }
-      }
-    },
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+      var tile = this.tiles[i][j];
+      var tileElement = document.createElement("div");
+      tileElement.className = "tile";
+      tileElement.textContent = tile !== null ? tile : "";
+      tileElement.style.backgroundColor = this.getTileColor(tile);
+      gridContainer.appendChild(tileElement);
+    }
+  }
+}
+
 
     getTileColor: function (value) {
       var colors = {
