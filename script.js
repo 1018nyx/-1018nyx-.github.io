@@ -14,12 +14,17 @@ document.addEventListener("DOMContentLoaded", function() {
     },
 
     createGrid: function() {
+      var gridContainer = document.querySelector(".grid-container");
       for (var i = 0; i < this.size; i++) {
         this.tiles[i] = [];
         this.isMerged[i] = [];
         for (var j = 0; j < this.size; j++) {
           this.tiles[i][j] = null;
           this.isMerged[i][j] = false;
+
+          var tileElement = document.createElement("div");
+          tileElement.className = "tile";
+          gridContainer.appendChild(tileElement);
         }
       }
     },
@@ -44,18 +49,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     updateGrid: function() {
       var gridContainer = document.querySelector(".grid-container");
-      gridContainer.innerHTML = "";
 
       for (var i = 0; i < this.size; i++) {
         for (var j = 0; j < this.size; j++) {
           var tile = this.tiles[i][j];
-          var tileElement = document.createElement("div");
-          tileElement.className = "tile";
+          var tileElement = gridContainer.children[i * this.size + j];
           tileElement.textContent = tile !== null ? tile : "";
           tileElement.style.backgroundColor = this.getTileColor(tile);
-          gridContainer.appendChild(tileElement);
         }
       }
+      
+      document.getElementById("score").textContent = this.score;
     },
 
     getTileColor: function(value) {
