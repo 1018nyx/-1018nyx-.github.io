@@ -201,3 +201,47 @@ document.addEventListener("DOMContentLoaded", function () {
     Game.moveTiles(direction);
   });
 });
+var touchStartX = 0;
+var touchStartY = 0;
+var touchEndX = 0;
+var touchEndY = 0;
+
+document.addEventListener("touchstart", function (event) {
+  touchStartX = event.touches[0].clientX;
+  touchStartY = event.touches[0].clientY;
+});
+
+document.addEventListener("touchmove", function (event) {
+  event.preventDefault();
+});
+
+document.addEventListener("touchend", function (event) {
+  touchEndX = event.changedTouches[0].clientX;
+  touchEndY = event.changedTouches[0].clientY;
+  var direction = getSwipeDirection();
+  if (direction) {
+    Game.moveTiles(direction);
+  }
+});
+
+function getSwipeDirection() {
+  var deltaX = touchEndX - touchStartX;
+  var deltaY = touchEndY - touchStartY;
+  var minDistance = 50; // Minimum distance required for a swipe
+
+  if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minDistance) {
+    if (deltaX > 0) {
+      return "right";
+    } else {
+      return "left";
+    }
+  } else if (Math.abs(deltaY) > minDistance) {
+    if (deltaY > 0) {
+      return "down";
+    } else {
+      return "up";
+    }
+  }
+
+  return null;
+}
