@@ -304,4 +304,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var touchEndY = event.changedTouches[0].clientY;
     Game.handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
   });
+
+  var restartButton = document.querySelector(".restart-button");
+  restartButton.addEventListener("click", function () {
+    Game.init();
+  });
 });
