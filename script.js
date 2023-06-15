@@ -225,3 +225,24 @@ document.addEventListener("DOMContentLoaded", function () {
     return null;
   }
 });
+function getSwipeDirection() {
+  var deltaX = touchEndX - touchStartX;
+  var deltaY = touchEndY - touchStartY;
+  var minDistance = 50; // Minimum distance required for a swipe
+
+  if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minDistance) {
+    if (deltaX > 0) {
+      return "right";
+    } else {
+      return "left";
+    }
+  } else if (Math.abs(deltaY) > minDistance) {
+    if (deltaY > 0) {
+      return "down";
+    } else {
+      return "up";
+    }
+  }
+
+  return null;
+}
