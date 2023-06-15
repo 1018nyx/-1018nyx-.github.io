@@ -16,7 +16,77 @@
     <button class="restart-button">Restart</button>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Your modified JavaScript code goes here
+    // ...
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Modified Game object and its methods
+      var Game = {
+        // ...
+
+        moveTiles: function (direction) {
+          // ...
+
+          var moveLeft = function () {
+            // ...
+          };
+
+          var mergeLeft = function () {
+            // ...
+          };
+
+          var moveRight = function () {
+            // ...
+          };
+
+          var mergeRight = function () {
+            // ...
+          };
+
+          var moveUp = function () {
+            // ...
+          };
+
+          var mergeUp = function () {
+            // ...
+          };
+
+          var moveDown = function () {
+            // ...
+          };
+
+          var mergeDown = function () {
+            // ...
+          };
+
+          if (direction === "left") {
+            moveLeft();
+            mergeLeft();
+            moveLeft();
+          } else if (direction === "right") {
+            moveRight();
+            mergeRight();
+            moveRight();
+          } else if (direction === "up") {
+            moveUp();
+            mergeUp();
+            moveUp();
+          } else if (direction === "down") {
+            moveDown();
+            mergeDown();
+            moveDown();
+          }
+
+          // ...
+        },
+
+        // ...
+      };
+
+      Game.init();
+    });
+  </script>
 </body>
 
 </html>
