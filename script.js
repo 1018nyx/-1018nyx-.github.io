@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
     isMerged: [],
     touchStartX: 0,
     touchStartY: 0,
-    touchEndX: 0,
-    touchEndY: 0,
 
     init: function () {
       this.createGrid();
@@ -143,8 +141,8 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       var moveUp = function () {
-        for (var i = 1; i < self.size; i++) {
-          for (var j = 0; j < self.size; j++) {
+        for (var j = 0; j < self.size; j++) {
+          for (var i = 1; i < self.size; i++) {
             var currentTile = self.tiles[i][j];
             if (currentTile !== null) {
               var k = i - 1;
@@ -171,8 +169,8 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       var moveDown = function () {
-        for (var i = self.size - 2; i >= 0; i--) {
-          for (var j = 0; j < self.size; j++) {
+        for (var j = 0; j < self.size; j++) {
+          for (var i = self.size - 2; i >= 0; i--) {
             var currentTile = self.tiles[i][j];
             if (currentTile !== null) {
               var k = i + 1;
@@ -198,99 +196,64 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       };
 
-      var handleMove = function () {
-        if (direction === "left") {
+      switch (direction) {
+        case "left":
           moveLeft();
-        } else if (direction === "right") {
+          break;
+        case "right":
           moveRight();
-        } else if (direction === "up") {
+          break;
+        case "up":
           moveUp();
-        } else if (direction === "down") {
+          break;
+        case "down":
           moveDown();
-        }
+          break;
+      }
 
-        if (moved) {
-          self.addRandomTile();
-          self.updateGrid();
-          self.checkGameOver();
-        }
-      };
-
-      handleMove();
+      if (moved) {
+        this.addRandomTile();
+        this.updateGrid();
+        this.checkGameOver();
+      }
     },
 
     addTouchListeners: function () {
+      var self = this;
       var gridContainer = document.querySelector(".grid-container");
 
       gridContainer.addEventListener("touchstart", function (event) {
-        var touch = event.touches[0];
-        this.touchStartX = touch.clientX;
-        this.touchStartY = touch.clientY;
-      });
-
-      gridContainer.addEventListener("touchmove", function (event) {
-        event.preventDefault();
+        self.touchStartX = event.touches[0].clientX;
+        self.touchStartY = event.touches[0].clientY;
       });
 
       gridContainer.addEventListener("touchend", function (event) {
-        var touch = event.changedTouches[0];
-        this.touchEndX = touch.clientX;
-        this.touchEndY = touch.clientY;
+        var touchEndX = event.changedTouches[0].clientX;
+        var touchEndY = event.changedTouches[0].clientY;
 
-        var deltaX = this.touchEndX - this.touchStartX;
-        var deltaY = this.touchEndY - this.touchStartY;
-        var swipeThreshold = 50;
+        var deltaX = touchEndX - self.touchStartX;
+        var deltaY = touchEndY - self.touchStartY;
 
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          if (Math.abs(deltaX) > swipeThreshold) {
-            if (deltaX > 0) {
-              // Swipe right
-              this.moveTiles("right");
-            } else {
-              // Swipe left
-              this.moveTiles("left");
-            }
+          if (deltaX > 0) {
+            self.moveTiles("right");
+          } else {
+            self.moveTiles("left");
           }
         } else {
-          if (Math.abs(deltaY) > swipeThreshold) {
-            if (deltaY > 0) {
-              // Swipe down
-              this.moveTiles("down");
-            } else {
-              // Swipe up
-              this.moveTiles("up");
-            }
+          if (deltaY > 0) {
+            self.moveTiles("down");
+          } else {
+            self.moveTiles("up");
           }
         }
       });
     },
 
     checkGameOver: function () {
-      // Check if there are any valid moves left
-      var validMoves = false;
-
-      for (var i = 0; i < this.size; i++) {
-        for (var j = 0; j < this.size; j++) {
-          if (this.tiles[i][j] === null) {
-            validMoves = true;
-            break;
-          }
-          if (j < this.size - 1 && this.tiles[i][j] === this.tiles[i][j + 1]) {
-            validMoves = true;
-            break;
-          }
-          if (i < this.size - 1 && this.tiles[i][j] === this.tiles[i + 1][j]) {
-            validMoves = true;
-            break;
-          }
-        }
-      }
-
-      if (!validMoves) {
-        this.gameOver = true;
-        alert("Game Over! Your Score: " + this.score);
-      }
-    },
+      // Check if game over condition is met
+      // ...
+    }
   };
 
   Game.init();
