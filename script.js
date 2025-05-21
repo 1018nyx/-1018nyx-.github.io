@@ -129,10 +129,58 @@ function canMatch(cell1, cell2, currentBoard) {
     }
   }
 
-  // Special Adjacency Rule (Only if other paths failed or weren't applicable)
+  // New Special Adjacency Rule (if other paths failed)
   if (!pathIsClear) {
-    if ((cell1.col === BOARD_COLS - 1 && cell2.col === 0 && cell1.row + 1 === cell2.row && currentBoard[cell1.row][cell1.col] !== null && currentBoard[cell2.row][cell2.col] !== null) ||
-        (cell2.col === BOARD_COLS - 1 && cell1.col === 0 && cell2.row + 1 === cell1.row && currentBoard[cell2.row][cell2.col] !== null && currentBoard[cell1.row][cell1.col] !== null)) {
+    let isSpecialAdjacency = false;
+    const boardToUse = currentBoard; // Alias for clarity within this block
+
+    if (cell1.row + 1 === cell2.row) { // cell1 is on row R, cell2 is on row R+1
+      let lastNonEmptyCol1 = -1;
+      for (let i = BOARD_COLS - 1; i >= 0; i--) {
+        if (boardToUse[cell1.row] && boardToUse[cell1.row][i] !== null) {
+          lastNonEmptyCol1 = i;
+          break;
+        }
+      }
+
+      let firstNonEmptyCol2 = -1;
+      for (let i = 0; i < BOARD_COLS; i++) {
+        if (boardToUse[cell2.row] && boardToUse[cell2.row][i] !== null) {
+          firstNonEmptyCol2 = i;
+          break;
+        }
+      }
+      // Ensure rows exist and cells were found before comparing
+      if (boardToUse[cell1.row] && boardToUse[cell2.row] &&
+          cell1.col === lastNonEmptyCol1 && cell2.col === firstNonEmptyCol2 && 
+          lastNonEmptyCol1 !== -1 && firstNonEmptyCol2 !== -1) {
+        isSpecialAdjacency = true;
+      }
+    } else if (cell2.row + 1 === cell1.row) { // cell2 is on row R, cell1 is on row R+1
+      let lastNonEmptyCol2 = -1;
+      for (let i = BOARD_COLS - 1; i >= 0; i--) {
+        if (boardToUse[cell2.row] && boardToUse[cell2.row][i] !== null) {
+          lastNonEmptyCol2 = i;
+          break;
+        }
+      }
+
+      let firstNonEmptyCol1 = -1;
+      for (let i = 0; i < BOARD_COLS; i++) {
+        if (boardToUse[cell1.row] && boardToUse[cell1.row][i] !== null) {
+          firstNonEmptyCol1 = i;
+          break;
+        }
+      }
+      // Ensure rows exist and cells were found before comparing
+      if (boardToUse[cell2.row] && boardToUse[cell1.row] &&
+          cell2.col === lastNonEmptyCol2 && cell1.col === firstNonEmptyCol1 &&
+          lastNonEmptyCol2 !== -1 && firstNonEmptyCol1 !== -1) {
+        isSpecialAdjacency = true;
+      }
+    }
+
+    if (isSpecialAdjacency) {
       pathIsClear = true;
     }
   }
@@ -286,9 +334,58 @@ function checkMatch(cell1, cell2) { // cell1 and cell2 are {row, col, value}
       currentCol += dc;
     }
   }
-  if (!pathIsClear) { // Special Adjacency if other paths failed
-    if ((cell1.col === BOARD_COLS - 1 && cell2.col === 0 && cell1.row + 1 === cell2.row && gameBoard[cell1.row][cell1.col] !== null && gameBoard[cell2.row][cell2.col] !== null) ||
-        (cell2.col === BOARD_COLS - 1 && cell1.col === 0 && cell2.row + 1 === cell1.row && gameBoard[cell2.row][cell2.col] !== null && gameBoard[cell1.row][cell1.col] !== null)) {
+  // New Special Adjacency Rule (if other paths failed)
+  if (!pathIsClear) {
+    let isSpecialAdjacency = false;
+    const boardToUse = gameBoard; // Alias for clarity
+
+    if (cell1.row + 1 === cell2.row) { // cell1 is on row R, cell2 is on row R+1
+      let lastNonEmptyCol1 = -1;
+      for (let i = BOARD_COLS - 1; i >= 0; i--) {
+        if (boardToUse[cell1.row] && boardToUse[cell1.row][i] !== null) {
+          lastNonEmptyCol1 = i;
+          break;
+        }
+      }
+
+      let firstNonEmptyCol2 = -1;
+      for (let i = 0; i < BOARD_COLS; i++) {
+        if (boardToUse[cell2.row] && boardToUse[cell2.row][i] !== null) {
+          firstNonEmptyCol2 = i;
+          break;
+        }
+      }
+      // Ensure rows exist and cells were found
+      if (boardToUse[cell1.row] && boardToUse[cell2.row] &&
+          cell1.col === lastNonEmptyCol1 && cell2.col === firstNonEmptyCol2 &&
+          lastNonEmptyCol1 !== -1 && firstNonEmptyCol2 !== -1) {
+        isSpecialAdjacency = true;
+      }
+    } else if (cell2.row + 1 === cell1.row) { // cell2 is on row R, cell1 is on row R+1
+      let lastNonEmptyCol2 = -1;
+      for (let i = BOARD_COLS - 1; i >= 0; i--) {
+        if (boardToUse[cell2.row] && boardToUse[cell2.row][i] !== null) {
+          lastNonEmptyCol2 = i;
+          break;
+        }
+      }
+
+      let firstNonEmptyCol1 = -1;
+      for (let i = 0; i < BOARD_COLS; i++) {
+        if (boardToUse[cell1.row] && boardToUse[cell1.row][i] !== null) {
+          firstNonEmptyCol1 = i;
+          break;
+        }
+      }
+      // Ensure rows exist and cells were found
+      if (boardToUse[cell2.row] && boardToUse[cell1.row] &&
+          cell2.col === lastNonEmptyCol2 && cell1.col === firstNonEmptyCol1 &&
+          lastNonEmptyCol2 !== -1 && firstNonEmptyCol1 !== -1) {
+        isSpecialAdjacency = true;
+      }
+    }
+    
+    if (isSpecialAdjacency) {
       pathIsClear = true;
     }
   }

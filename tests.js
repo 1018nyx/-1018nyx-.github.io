@@ -105,34 +105,97 @@ describe('canMatch function', () => {
     console.log('Test: same-number, blocked diagonal path - Expected: false');
   });
 
-  it('should return true for special adjacency rule (end of row to start of next)', () => {
-    // Assuming BOARD_COLS = 10. The last column index is BOARD_COLS - 1.
+  // --- Start of Refined Special Adjacency Tests ---
+
+  it('should return true for special adjacency: last actual number of row R and first actual number of row R+1', () => {
     const boardData = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 7], // cell1 at (0,9)
-      [3, 1, 1, 1, 1, 1, 1, 1, 1, 1]  // cell2 at (1,0)
+      [null, null, 5, null, null, null, null, null, null, null], // Row R (index 0), last actual number is 5 at col 2
+      [5, null, null, null, null, null, null, null, null, null]  // Row R+1 (index 1), first actual number is 5 at col 0
     ];
-    const board = createTestBoard(boardData);
-    const cell1 = { row: 0, col: BOARD_COLS - 1, value: 7 }; // BOARD_COLS - 1 should now be 9
-    const cell2 = { row: 1, col: 0, value: 3 };
-    // const result = canMatch(cell1, cell2, board);
+    // BOARD_COLS is 10.
+    gameBoard = createTestBoard(boardData);
+    const cell1 = { row: 0, col: 2, value: 5 };
+    const cell2 = { row: 1, col: 0, value: 5 };
+    // const result = canMatch(cell1, cell2, gameBoard);
     // // Expected: result to be true
-    console.log('Test: special adjacency (end to start of next) - Expected: true');
-  });
-  
-  it('should return true for special adjacency rule even if intermediate cells are not null (as it is direct adjacency)', () => {
-    // BOARD_COLS is 10. Last column index is 9.
-    const boardData = [
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 5], // cell1 at (0,9) with value 5
-      [5, 8, 7, 6, 5, 4, 3, 2, 1, 0]  // cell2 at (1,0) with value 5
-    ];
-    const board = createTestBoard(boardData);
-    const cell1 = { row: 0, col: BOARD_COLS - 1, value: boardData[0][BOARD_COLS - 1] };
-    const cell2 = { row: 1, col: 0, value: boardData[1][0] };
-    // const result = canMatch(cell1, cell2, board);
-    // // Expected: result to be true
-    console.log('Test: special adjacency (values 5, 5) - Expected: true');
+    console.log('Test Special Adjacency (last actual to first actual): Expected: true');
   });
 
+  it('should return true for special adjacency: [1, null, 3] and [3, null, 8] (padded to BOARD_COLS)', () => {
+    const boardData = [
+      [1, null, 3, null, null, null, null, null, null, null], // last actual is 3 at col 2
+      [3, null, 8, null, null, null, null, null, null, null]  // first actual is 3 at col 0
+    ];
+    // BOARD_COLS is 10.
+    gameBoard = createTestBoard(boardData);
+    const cell1 = { row: 0, col: 2, value: 3 };
+    const cell2 = { row: 1, col: 0, value: 3 };
+    // const result = canMatch(cell1, cell2, gameBoard);
+    // // Expected: result to be true
+    console.log('Test Special Adjacency (complex rows, padded): Expected: true');
+  });
+
+  it('should return false if cell1 is NOT the last actual number of its row for special adjacency', () => {
+    const boardData = [
+      [5, null, 2, null, null, null, null, null, null, null], // Last actual is 2 at col 2.
+      [2, null, null, null, null, null, null, null, null, null]
+    ];
+    gameBoard = createTestBoard(boardData);
+    const cell1 = { row: 0, col: 0, value: 5 }; // Selecting 5 at (0,0), not 2 at (0,2) (the last actual)
+    const cell2 = { row: 1, col: 0, value: 2 };
+    // const result = canMatch(cell1, cell2, gameBoard);
+    // // Expected: result to be false
+    console.log('Test Special Adjacency (cell1 not last actual): Expected: false');
+  });
+
+  it('should return false if cell2 is NOT the first actual number of its row for special adjacency', () => {
+    const boardData = [
+      [null, null, 5, null, null, null, null, null, null, null], // Row R, last actual is 5 at col 2
+      [null, 5, null, null, null, null, null, null, null, null]  // Row R+1, 5 at (1,1) is not the first actual if (1,0) was non-null (or if first actual is further right)
+                                                                  // For this test, let's make (1,0) non-null to be clearer.
+    ];
+    const boardDataClearer = [
+      [null, null, 5, null, null, null, null, null, null, null], // Last actual is 5 at col 2
+      [8, 5, null, null, null, null, null, null, null, null]  // First actual is 8 at col 0
+    ];
+    gameBoard = createTestBoard(boardDataClearer);
+    const cell1 = { row: 0, col: 2, value: 5 };
+    const cell2 = { row: 1, col: 1, value: 5 }; // Selecting 5 at (1,1), not 8 at (1,0)
+    // const result = canMatch(cell1, cell2, gameBoard);
+    // // Expected: result to be false
+    console.log('Test Special Adjacency (cell2 not first actual): Expected: false');
+  });
+  
+  it('should return false for special adjacency if the adjacent connecting row (upper) is empty', () => {
+    const boardData = [
+        [null, null, null, null, null, null, null, null, null, null], // Row 0 (empty)
+        [5, null, null, null, null, null, null, null, null, null]  // Row 1
+    ];
+    gameBoard = createTestBoard(boardData);
+    // cell1 value doesn't matter for this path check if row is empty,
+    // as lastNonEmptyCol1 will be -1.
+    // However, canMatch checks value first. So cell1.value must be part of a valid pair with cell2.value.
+    const cell1 = { row: 0, col: 0, value: 5 }; 
+    const cell2 = { row: 1, col: 0, value: 5 };
+    // const result = canMatch(cell1, cell2, gameBoard);
+    // // Expected: result to be false (because row 0 has no lastNonEmptyCol)
+    console.log('Test Special Adjacency (upper adjacent row empty): Expected: false');
+  });
+
+  it('should return false for special adjacency if the adjacent connecting row (lower) is empty', () => {
+    const boardData = [
+        [null, null, 5, null, null, null, null, null, null, null], // Row 0
+        [null, null, null, null, null, null, null, null, null, null]  // Row 1 (empty)
+    ];
+    gameBoard = createTestBoard(boardData);
+    const cell1 = { row: 0, col: 2, value: 5 }; 
+    const cell2 = { row: 1, col: 0, value: 5 }; // cell2.value for value match
+    // const result = canMatch(cell1, cell2, gameBoard);
+    // // Expected: result to be false (because row 1 has no firstNonEmptyCol)
+    console.log('Test Special Adjacency (lower adjacent row empty): Expected: false');
+  });
+
+  // --- End of Refined Special Adjacency Tests ---
 
   it('should return false if numbers do not match or sum to 10', () => {
     const board = createTestBoard([[1, null, 3]]);
