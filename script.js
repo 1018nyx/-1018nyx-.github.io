@@ -200,6 +200,21 @@ function addNewRows(numberOfRows) {
   console.log(`${numberOfRows} new row(s) added.`);
 }
 
+// NEW: removeEmptyRows Function
+function removeEmptyRows() {
+  let rowsRemoved = false;
+  for (let i = gameBoard.length - 1; i >= 0; i--) {
+    const row = gameBoard[i];
+    const isRowEmpty = row.every(cell => cell === null);
+    if (isRowEmpty) {
+      gameBoard.splice(i, 1);
+      rowsRemoved = true;
+    }
+  }
+  if (rowsRemoved) console.log('Empty rows have been removed.'); // Optional logging
+  return rowsRemoved;
+}
+
 // NEW: isMovePossible Function
 function isMovePossible() {
   for (let r1 = 0; r1 < gameBoard.length; r1++) {
@@ -281,10 +296,12 @@ function checkMatch(cell1, cell2) { // cell1 and cell2 are {row, col, value}
   if (pathIsClear) { // Value and path clear
     console.log("Match successful in checkMatch:", cell1, cell2);
     clearNumbers(cell1, cell2);
-    updateScore(10); // Example: 10 points per match
-    displayBoard(); // Refresh board after clearing
+    updateScore(10); // Score can be updated here
+    removeEmptyRows(); // Call the new function to remove any newly emptied rows
 
-    if (isBoardEmpty()) {
+    displayBoard(); // Update the display *after* numbers are cleared AND rows are potentially removed
+
+    if (isBoardEmpty()) { // This checks if the *entire board* is now empty
       console.log("Board is empty, adding new rows.");
       addNewRows(5); // Changed to add 5 new rows instead of NUM_INITIAL_ROWS
       displayBoard(); // Refresh board after adding new rows

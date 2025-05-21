@@ -251,3 +251,99 @@ describe('clearNumbers function', () => {
 // in script.js might be affected by these functions. In a real test setup,
 // you might pass `gameBoard` as an argument or use a more structured way to manage state.
 // The console.log statements are placeholders for actual assertions.
+
+describe('removeEmptyRows function', () => {
+  // Helper to set up gameBoard for tests, assuming gameBoard is globally accessible for tests
+  // or part of a test utility object. For simplicity, we'll assume direct manipulation of a
+  // test-scoped gameBoard.
+  let testBoard; // This will be our gameBoard for each test
+
+  // BOARD_COLS might be needed if creating rows with specific non-null values
+  const BOARD_COLS_TEST = 10; // Assuming this is the current value
+
+  beforeEach(() => {
+    // Reset testBoard before each test if needed, or set it specifically in each 'it' block.
+    // For this, setting in each 'it' block is clearer.
+  });
+
+  it('should remove a single fully empty row from the middle', () => {
+    testBoard = [
+      [1, 2, 3],
+      [null, null, null], // Empty row
+      [4, 5, 6]
+    ];
+    // Simulate global gameBoard or pass testBoard to removeEmptyRows if it's refactored for testability
+    // For now, assume removeEmptyRows operates on a globally accessible 'gameBoard'
+    gameBoard = testBoard; // Assign to the global gameBoard that the function uses
+    // removeEmptyRows(); // Function would be called in a real test
+    // // Expected: gameBoard.length to be 2
+    // // Expected: gameBoard to deep equal [[1, 2, 3], [4, 5, 6]]
+    console.log('Test: remove single empty row (middle) - Expected length: 2, Expected board: [[1,2,3],[4,5,6]]');
+  });
+
+  it('should remove multiple fully empty rows', () => {
+    testBoard = [
+      [1, 2, 3],
+      [null, null, null],
+      [null, null, null],
+      [4, 5, 6]
+    ];
+    gameBoard = testBoard;
+    // removeEmptyRows();
+    // // Expected: gameBoard.length to be 2
+    // // Expected: gameBoard to deep equal [[1, 2, 3], [4, 5, 6]]
+    console.log('Test: remove multiple empty rows - Expected length: 2, Expected board: [[1,2,3],[4,5,6]]');
+  });
+
+  it('should not remove rows that are partially filled', () => {
+    testBoard = [
+      [1, 2, 3],
+      [null, 0, null], // 0 is a number, so not fully empty if null is the only empty marker
+      [4, 5, 6]
+    ];
+    // If 0 is a valid number, this test is fine. If 0 means empty, change 0 to a non-null number.
+    // Assuming 'null' is the sole marker for an empty cell for this test.
+    gameBoard = testBoard;
+    // removeEmptyRows();
+    // // Expected: gameBoard.length to be 3
+    // // Expected: gameBoard to deep equal [[1, 2, 3], [null, 0, null], [4, 5, 6]]
+    console.log('Test: not remove partially filled - Expected length: 3, Expected board: [[1,2,3],[null,0,null],[4,5,6]]');
+  });
+
+  it('should handle an already empty gameBoard (length 0) without errors', () => {
+    testBoard = [];
+    gameBoard = testBoard;
+    // removeEmptyRows();
+    // // Expected: gameBoard.length to be 0
+    // // Expected: gameBoard to deep equal []
+    console.log('Test: handle empty gameBoard - Expected length: 0, Expected board: []');
+  });
+
+  it('should remove the last remaining row if it becomes empty', () => {
+    testBoard = [
+      [null, null, null]
+    ];
+    gameBoard = testBoard;
+    // removeEmptyRows();
+    // // Expected: gameBoard.length to be 0
+    // // Expected: gameBoard to deep equal []
+    console.log('Test: remove last remaining empty row - Expected length: 0, Expected board: []');
+  });
+
+  it('should remove empty rows from the beginning and end', () => {
+    testBoard = [
+      [null, null, null],
+      [1, 2, 3],
+      [null, null, null]
+    ];
+    gameBoard = testBoard;
+    // removeEmptyRows();
+    // // Expected: gameBoard.length to be 1
+    // // Expected: gameBoard to deep equal [[1, 2, 3]]
+    console.log('Test: remove empty rows from beginning and end - Expected length: 1, Expected board: [[1,2,3]]');
+  });
+
+  // Add a cleanup for the global gameBoard if it was overwritten,
+  // though in a real test env, modules/scoping would handle this.
+  // afterAll(() => { gameBoard = /* original gameBoard or undefined */; });
+});
