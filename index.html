@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>2048 Game</title>
+  <title>Number Match Game</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div class="grid-container">
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
+  <div class="game-container">
+    <div id="score-container">
+      Score: <span id="score-value">0</span>
+    </div>
+    <div id="game-board">
+      <!-- Numbers will be displayed here by JavaScript -->
+    </div>
+    <button id="hint-button">Hint</button>
+    <button id="restart-button">Restart Game</button>
   </div>
-  <button class="restart-button">Restart</button>
+
+  <div id="game-over-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <p>Game Over!</p>
+      <p>Final Score: <span id="final-score">0</span></p>
+      <button id="play-again-button">Play Again</button>
+      <button id="submit-score-button">Submit Score</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

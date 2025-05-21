@@ -1,44 +1,270 @@
-.grid-container {
+/* 1. General Page & Game Container */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9; /* Light grayish-blue background */
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
+  padding-top: 20px;
+  color: #333;
 }
 
-.tile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-basis: 18%;
-  height: 100px;
-  font-size: 40px;
-  font-weight: bold;
-  background-color: #eee4da;
-  color: #776e65;
+.game-container {
+  background-color: #ffffff; /* White background for the game area */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 2. Game Board (#game-board) */
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(9, 40px); /* BOARD_COLS = 9 */
+  gap: 4px; /* Replaces cell margin for grid layout */
+  padding: 10px;
+  background-color: #d8d8d8; /* Slightly darker background for the board itself */
+  border: 2px solid #b0b0b0; /* Clearer border for the board */
   border-radius: 5px;
+  margin: 0 auto 20px auto; /* Centering the board if its parent is wider */
 }
 
-.restart-button {
-  margin-top: 10px;
+/* 3. Cells (.cell, .empty-cell, .selected, .hint) */
+.cell {
+  width: 40px;
+  height: 40px;
+  display: flex; /* For easy centering of content */
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4em; /* Larger font for numbers */
+  font-weight: bold;
+  color: #444;
+  background-color: #e9e9e9; /* Light gray for active cells */
+  border: 1px solid #bdbdbd; /* Softer border */
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.cell:hover:not(.empty-cell) {
+  background-color: #dcdcdc; /* Slightly darker on hover */
+  transform: scale(1.05);
+}
+
+.cell.empty-cell {
+  background-color: #fafafa; /* Lighter background for empty cells */
+  border: 1px dashed #d0d0d0; /* Dashed border to indicate empty slot */
+  cursor: default;
+  visibility: visible; /* As per instruction */
+}
+
+.cell.empty-cell:hover {
+  transform: none; /* No hover effect for empty cells */
+}
+
+
+.cell.selected {
+  background-color: #88aaff; /* More vibrant blue */
+  border: 2px solid #0033cc; /* Darker blue border */
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.cell.hint {
+  background-color: #fffacd; /* LemonChiffon */
+  border: 2px solid #ffd700; /* Gold */
+  color: #555;
+  animation: pulseHint 1s infinite alternate;
+}
+
+@keyframes pulseHint {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+/* 4. Score Display (#score-container) */
+#score-container {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #2c3e50; /* Dark blue-gray for score */
+  margin-bottom: 20px;
+}
+
+#score-container span {
+  color: #e74c3c; /* Reddish color for the score value */
+}
+
+/* 5. Buttons (#hint-button, #restart-button, and buttons in modal) */
+button {
   padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
+  font-size: 1em;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: #3498db; /* Primary button blue */
+  color: white;
+  margin: 5px 10px;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-@media (max-width: 480px) {
-  .grid-container {
-    width: 200px;
-    height: 200px;
+button:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0px);
+}
+
+#hint-button {
+  background-color: #f39c12; /* Orange for hint */
+}
+
+#hint-button:hover {
+  background-color: #e67e22; /* Darker orange */
+}
+
+#restart-button {
+  background-color: #e74c3c; /* Red for restart */
+}
+
+#restart-button:hover {
+  background-color: #c0392b; /* Darker red */
+}
+
+/* 6. Game Over Modal (#game-over-modal) */
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+  display: flex; /* Used by JS to show/hide */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+  opacity: 0; /* Start hidden for transition */
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* JS will set style.display to 'flex', then we can control with opacity/visibility */
+.modal[style*="display: block"], .modal[style*="display: flex"] { /* Target when JS makes it visible */
+    opacity: 1;
+    visibility: visible;
+}
+
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+  transform: scale(0.9); /* Start slightly smaller for transition */
+  transition: transform 0.3s ease;
+}
+
+.modal[style*="display: block"] .modal-content,
+.modal[style*="display: flex"] .modal-content {
+    transform: scale(1);
+}
+
+
+.modal-content p {
+  font-size: 1.3em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.modal-content #final-score {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #e74c3c;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.modal-content button {
+  margin: 10px;
+}
+
+/* 7. Responsive Design (Basic) */
+@media (max-width: 600px) {
+  body {
+    padding-top: 10px;
+  }
+  .game-container {
+    padding: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
-  .tile {
-    flex-basis: 40%;
-    height: 60px;
-    font-size: 18px;
+  #game-board {
+    /* Adjust cell size and gap for smaller screens if BOARD_COLS is large */
+    /* For 9 columns, 40px is already quite wide. Maybe reduce padding/gap first. */
+    /* Example: If cells were larger, you might do: */
+    /* grid-template-columns: repeat(9, 30px); */
+    /* gap: 3px; */
+    /* width: calc(9 * 30px + 8 * 3px + 2 * 10px); /* Recalculate width */
+    padding: 8px;
+    gap: 3px;
+    /* Ensure it fits, or consider overflow-x: auto for game-board parent */
   }
+
+  .cell {
+    /* width: 30px; */ /* Example if changing size */
+    /* height: 30px; */
+    /* font-size: 1em; */
+  }
+
+  #score-container {
+    font-size: 1.5em;
+  }
+
+  button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
+
+  .modal-content {
+    padding: 20px 25px;
+    width: 85%;
+  }
+  .modal-content p {
+    font-size: 1.1em;
+  }
+  .modal-content #final-score {
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 420px) { /* More aggressive for very small screens */
+    #game-board {
+        grid-template-columns: repeat(9, 30px);
+        gap: 2px;
+        padding: 5px;
+    }
+    .cell {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+    .game-container {
+        padding: 10px;
+    }
+     button {
+        padding: 8px 12px;
+        font-size: 0.85em;
+        margin: 5px;
+    }
+    .modal-content button {
+        font-size: 0.9em; /* Keep modal buttons slightly more readable */
+    }
 }
