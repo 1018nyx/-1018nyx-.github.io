@@ -16,7 +16,7 @@ const createTestBoard = (dataArray) => {
 };
 
 // Global constants that might be used by the functions under test
-const BOARD_COLS = 9;
+const BOARD_COLS = 10; // Updated from 9 to 10
 // let gameBoard = []; // This would be manipulated by tests directly or via setters
 
 describe('canMatch function', () => {
@@ -106,13 +106,13 @@ describe('canMatch function', () => {
   });
 
   it('should return true for special adjacency rule (end of row to start of next)', () => {
-    // Assuming BOARD_COLS = 9
+    // Assuming BOARD_COLS = 10. The last column index is BOARD_COLS - 1.
     const boardData = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 7], // cell1 at (0,8)
-      [3, 1, 1, 1, 1, 1, 1, 1, 1]  // cell2 at (1,0)
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 7], // cell1 at (0,9)
+      [3, 1, 1, 1, 1, 1, 1, 1, 1, 1]  // cell2 at (1,0)
     ];
     const board = createTestBoard(boardData);
-    const cell1 = { row: 0, col: BOARD_COLS - 1, value: 7 };
+    const cell1 = { row: 0, col: BOARD_COLS - 1, value: 7 }; // BOARD_COLS - 1 should now be 9
     const cell2 = { row: 1, col: 0, value: 3 };
     // const result = canMatch(cell1, cell2, board);
     // // Expected: result to be true
@@ -120,12 +120,13 @@ describe('canMatch function', () => {
   });
   
   it('should return true for special adjacency rule even if intermediate cells are not null (as it is direct adjacency)', () => {
+    // BOARD_COLS is 10. Last column index is 9.
     const boardData = [
-      [1, 2, 3, 4, 5, 6, 7, 8, 5], // cell1 at (0,8) with value 5
-      [5, 8, 7, 6, 5, 4, 3, 2, 1]  // cell2 at (1,0) with value 5
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 5], // cell1 at (0,9) with value 5
+      [5, 8, 7, 6, 5, 4, 3, 2, 1, 0]  // cell2 at (1,0) with value 5
     ];
     const board = createTestBoard(boardData);
-    const cell1 = { row: 0, col: BOARD_COLS - 1, value: boardData[0][BOARD_COLS -1] };
+    const cell1 = { row: 0, col: BOARD_COLS - 1, value: boardData[0][BOARD_COLS - 1] };
     const cell2 = { row: 1, col: 0, value: boardData[1][0] };
     // const result = canMatch(cell1, cell2, board);
     // // Expected: result to be true

@@ -22,7 +22,7 @@ body {
 /* 2. Game Board (#game-board) */
 #game-board {
   display: grid;
-  grid-template-columns: repeat(9, 40px); /* BOARD_COLS = 9 */
+  grid-template-columns: repeat(10, 40px); /* BOARD_COLS = 10 */
   gap: 4px; /* Replaces cell margin for grid layout */
   padding: 10px;
   background-color: #d8d8d8; /* Slightly darker background for the board itself */
@@ -247,7 +247,7 @@ button:active {
 
 @media (max-width: 420px) { /* More aggressive for very small screens */
     #game-board {
-        grid-template-columns: repeat(9, 30px);
+        grid-template-columns: repeat(10, 30px); /* Adjusted for 10 columns */
         gap: 2px;
         padding: 5px;
     }

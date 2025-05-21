@@ -4,8 +4,8 @@ let score = 0;
 let selectedCell = null; // To store {row, col, value} of the first selected cell
 let gameOver = false; // NEW: Global game over state
 
-const BOARD_COLS = 9;
-const NUM_INITIAL_ROWS = 5;
+const BOARD_COLS = 10; // Changed from 9 to 10
+const NUM_INITIAL_ROWS = 14; // Changed from 5 to 14
 
 // DOM Element References
 let gameBoardElement;
@@ -286,7 +286,7 @@ function checkMatch(cell1, cell2) { // cell1 and cell2 are {row, col, value}
 
     if (isBoardEmpty()) {
       console.log("Board is empty, adding new rows.");
-      addNewRows(NUM_INITIAL_ROWS);
+      addNewRows(5); // Changed to add 5 new rows instead of NUM_INITIAL_ROWS
       displayBoard(); // Refresh board after adding new rows
     }
 
