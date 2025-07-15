@@ -11,9 +11,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-basis: 18%;
-  height: 100px;
-  font-size: 40px;
+  flex-basis: 9%;
+  height: 50px;
+  font-size: 20px;
   font-weight: bold;
   background-color: #eee4da;
   color: #776e65;
@@ -28,6 +28,26 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.shape-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.shape {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+}
+
+.shape .tile {
+  flex-basis: 30%;
+  height: 30px;
 }
 
 @media (max-width: 480px) {
