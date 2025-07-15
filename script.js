@@ -76,12 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
     },
 
     generateShapes: function () {
-      if (this.isGameOver()) {
-        this.gameOver = true;
-        alert("Game Over! Your score: " + this.score);
-        return;
-      }
-
       var shapeContainer = document.querySelector(".shape-container");
       shapeContainer.innerHTML = "";
       this.currentShapes = [];
@@ -113,6 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         shapeContainer.appendChild(shapeElement);
         this.addDragListeners(shapeElement);
+      }
+
+      if (this.isGameOver()) {
+        this.gameOver = true;
+        alert("Game Over! Your score: " + this.score);
       }
     },
 
