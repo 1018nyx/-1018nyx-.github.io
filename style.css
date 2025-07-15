@@ -48,6 +48,7 @@
 .shape .tile {
   flex-basis: 30%;
   height: 30px;
+  font-size: 0;
 }
 
 @media (max-width: 480px) {
